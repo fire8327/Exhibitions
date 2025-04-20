@@ -15,7 +15,7 @@
             </button>
 
             <!-- Меню (единое для десктопа и мобильного) -->
-            <div class="lg:flex lg:items-center lg:gap-6 text-white max-lg:fixed static bottom-0 left-0 w-full bg-[#2C2C2C] lg:bg-transparent rounded-t-xl shadow-[0px_0px_20px_-13px_black] z-[5] transition-all duration-500"
+            <div class="lg:flex lg:items-center lg:gap-6 text-white max-lg:fixed static bottom-0 left-0 w-full bg-[#2C2C2C] lg:bg-transparent rounded-t-xl max-lg:shadow-[0px_0px_20px_-13px_black] z-[5] transition-all duration-500"
                 :class="{ 'translate-y-0': isMenuShow, 'translate-y-full lg:translate-y-0': !isMenuShow }">
                 <div class="flex flex-col lg:flex-row gap-4 p-4 lg:p-0">
                     <NuxtLink to="/"
