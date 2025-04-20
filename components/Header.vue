@@ -5,7 +5,7 @@
             class="w-full flex items-center gap-4 justify-between px-4 py-2 bg-[#2C2C2C]/90 rounded-xl shadow-[0px_0px_20px_-13px_black]">
             <!-- Логотип -->
             <NuxtLink to="/" class="flex items-center gap-2 text-cyan-500 transition-all duration-500 hover:opacity-70">
-                <Icon class="text-3xl" name="hugeicons:job-search" />
+                <Icon class="text-3xl" name="streamline:ai-technology-spark-solid" />
                 <span class="text-xl font-mono font-semibold">Exhibitions</span>
             </NuxtLink>
 
@@ -17,14 +17,18 @@
             <!-- Меню (единое для десктопа и мобильного) -->
             <div class="lg:flex lg:items-center lg:gap-6 text-white max-lg:fixed static bottom-0 left-0 w-full bg-[#2C2C2C] lg:bg-transparent rounded-t-xl shadow-[0px_0px_20px_-13px_black] z-[5] transition-all duration-500"
                 :class="{ 'translate-y-0': isMenuShow, 'translate-y-full lg:translate-y-0': !isMenuShow }">
-                <div class="flex flex-col lg:flex-row gap-4 p-6 lg:p-0">
+                <div class="flex flex-col lg:flex-row gap-4 p-4 lg:p-0">
                     <NuxtLink to="/"
                         class="px-3 py-1 rounded-xl transition-all duration-500 lg:bg-[#3C3C3C] lg:shadow-md hover:bg-[#000000]/15 hover:border-cyan-500 border border-transparent after:w-0 after:h-px after:bg-white after:transition-all after:duration-500 lg:after:content-none hover:after:w-full">
                         Главная
                     </NuxtLink>
-                    <NuxtLink to="/about"
+                    <NuxtLink to="/"
                         class="px-3 py-1 rounded-xl transition-all duration-500 lg:bg-[#3C3C3C] lg:shadow-md hover:bg-[#000000]/15 hover:border-cyan-500 border border-transparent after:w-0 after:h-px after:bg-white after:transition-all after:duration-500 lg:after:content-none hover:after:w-full">
                         О нас
+                    </NuxtLink>
+                    <NuxtLink to="/"
+                        class="px-3 py-1 rounded-xl transition-all duration-500 lg:bg-[#3C3C3C] lg:shadow-md hover:bg-[#000000]/15 hover:border-cyan-500 border border-transparent after:w-0 after:h-px after:bg-white after:transition-all after:duration-500 lg:after:content-none hover:after:w-full">
+                        Выставки
                     </NuxtLink>
                      <!-- Иконка профиля (всегда видна на мобилке) -->
                     <NuxtLink to="/auth" class="lg:hidden flex transition-all duration-500 hover:opacity-70">
