@@ -38,3 +38,13 @@
 .mainHeading {
     @apply text-2xl text-white font-semibold font-mono
 }
+
+.bgStars {
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.35) 1px, transparent 1px),
+        radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+        radial-gradient(circle at 50% 70%, rgba(255, 255, 255, 0.32) 1px, transparent 1px),
+        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.38) 1px, transparent 1px),
+        radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+    background-size: 200px 200px;
+}
