@@ -1,4 +1,5 @@
 <template>
+    <!-- выставки -->
     <div class="flex flex-col gap-6">
         <p class="mainHeading">Текущие выставки</p>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -19,6 +20,20 @@
                     </span>
                 </div>
             </NuxtLink>
+        </div>
+    </div>
+    <div class="flex flex-col gap-6">
+        <p class="mainHeading">Популярные категории</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <NuxtLink
+            v-for="category in categories"
+            :key="category.slug"
+            to="/"
+            class="bg-[#2C2C2C]/90 shadow-md rounded-lg p-4 flex items-center flex-col gap-4 hover:shadow-lg transition-all duration-300 hover:bg-[#2C2C2C]"
+          >
+            <Icon class="text-3xl text-cyan-500" :name="category.icon"/>
+            <span class="text-base font-medium">{{ category.name }}</span>
+          </NuxtLink>
         </div>
     </div>
     <!-- не вошёл -->
@@ -69,22 +84,22 @@ const categories = [
   {
     slug: 'smartphones',
     name: 'Смартфоны',
-    icon: 'https://via.placeholder.com/48?text=📱',
+    icon: 'mdi:cellphone',
   },
   {
     slug: 'laptops',
     name: 'Ноутбуки',
-    icon: 'https://via.placeholder.com/48?text=💻',
+    icon: 'mdi:laptop',
   },
   {
     slug: 'gadgets',
     name: 'Гаджеты',
-    icon: 'https://via.placeholder.com/48?text=⌚',
+    icon: 'mdi:watch',
   },
   {
     slug: 'audio',
     name: 'Аудио',
-    icon: 'https://via.placeholder.com/48?text=🎧',
+    icon: 'mdi:headphones',
   },
 ]
 </script>
