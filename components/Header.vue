@@ -21,7 +21,7 @@
                     <NuxtLink to="/" class="px-4 py-1 rounded-xl transition-all duration-500 lg:bg-[#3C3C3C] lg:shadow-md hover:bg-[#000000]/15 hover:border-cyan-500 border border-transparent">
                         Главная
                     </NuxtLink>
-                    <NuxtLink to="/" class="px-4 py-1 rounded-xl transition-all duration-500 lg:bg-[#3C3C3C] lg:shadow-md hover:bg-[#000000]/15 hover:border-cyan-500 border border-transparent">
+                    <NuxtLink to="/about" class="px-4 py-1 rounded-xl transition-all duration-500 lg:bg-[#3C3C3C] lg:shadow-md hover:bg-[#000000]/15 hover:border-cyan-500 border border-transparent">
                         О нас
                     </NuxtLink>
                     <NuxtLink to="/exhibitions" class="px-4 py-1 rounded-xl transition-all duration-500 lg:bg-[#3C3C3C] lg:shadow-md hover:bg-[#000000]/15 hover:border-cyan-500 border border-transparent">

@@ -4,7 +4,7 @@
         <p class="mainHeading">Наша платформа</p>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div v-for="stat in stats" :key="stat.name"
-                class="bg-[#2C2C2C]/90 rounded-xl p-5 text-center shadow-md transition-all duration-300 hover:bg-[#2C2C2C] hover:shadow-lg group">
+                class="bg-[#2C2C2C]/90 rounded-xl p-5 text-center shadow-md transition-all duration-500 hover:bg-[#2C2C2C] hover:shadow-lg group">
                 <p class="text-2xl font-bold text-white mb-1">{{ stat.value }}</p>
                 <p class="font-light text-[#A0A0A0]">{{ stat.name }}</p>
             </div>
@@ -38,7 +38,7 @@
         <p class="mainHeading">Популярные категории</p>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <NuxtLink v-for="category in categories" :key="category.slug" to="/"
-                class="bg-[#2C2C2C]/90 shadow-md rounded-lg p-4 flex items-center flex-col gap-4 hover:shadow-lg transition-all duration-300 hover:bg-[#2C2C2C]">
+                class="bg-[#2C2C2C]/90 shadow-md rounded-lg p-4 flex items-center flex-col gap-4 hover:shadow-lg transition-all duration-500 hover:bg-[#2C2C2C]">
                 <Icon class="text-3xl text-cyan-500" :name="category.icon" />
                 <span class="text-base font-medium">{{ category.name }}</span>
             </NuxtLink>
