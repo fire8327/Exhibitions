@@ -49,6 +49,6 @@
     background-size: 200px 200px;
 }
 
-.router-link-active {
+.mainLink.router-link-active {
    @apply !bg-[#000000]/15 border-cyan-500
 }
