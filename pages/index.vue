@@ -1,4 +1,15 @@
 <template>
+    <!-- статистика -->
+    <div class="flex flex-col gap-6">
+        <p class="mainHeading">Наша платформа</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div v-for="stat in stats" :key="stat.name"
+                class="bg-[#2C2C2C]/90 rounded-xl p-5 text-center shadow-md transition-all duration-300 hover:bg-[#2C2C2C] hover:shadow-lg group">
+                <p class="text-2xl font-bold text-white mb-1">{{ stat.value }}</p>
+                <p class="font-light text-[#A0A0A0]">{{ stat.name }}</p>
+            </div>
+        </div>
+    </div>
     <!-- выставки -->
     <div class="flex flex-col gap-6">
         <p class="mainHeading">Текущие выставки</p>
@@ -22,22 +33,20 @@
             </NuxtLink>
         </div>
     </div>
+    <!-- категории -->
     <div class="flex flex-col gap-6">
         <p class="mainHeading">Популярные категории</p>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <NuxtLink
-            v-for="category in categories"
-            :key="category.slug"
-            to="/"
-            class="bg-[#2C2C2C]/90 shadow-md rounded-lg p-4 flex items-center flex-col gap-4 hover:shadow-lg transition-all duration-300 hover:bg-[#2C2C2C]"
-          >
-            <Icon class="text-3xl text-cyan-500" :name="category.icon"/>
-            <span class="text-base font-medium">{{ category.name }}</span>
-          </NuxtLink>
+            <NuxtLink v-for="category in categories" :key="category.slug" to="/"
+                class="bg-[#2C2C2C]/90 shadow-md rounded-lg p-4 flex items-center flex-col gap-4 hover:shadow-lg transition-all duration-300 hover:bg-[#2C2C2C]">
+                <Icon class="text-3xl text-cyan-500" :name="category.icon" />
+                <span class="text-base font-medium">{{ category.name }}</span>
+            </NuxtLink>
         </div>
     </div>
     <!-- не вошёл -->
-    <div class="bgStars w-full flex max-lg:flex-col gap-6 items-center text-center py-8 px-4 bg-[#2C2C2C]/90 rounded-2xl h-fit shadow-xl">
+    <div
+        class="bgStars w-full flex max-lg:flex-col gap-6 items-center text-center py-8 px-4 bg-[#2C2C2C]/90 rounded-2xl h-fit shadow-xl">
         <img src="/images/index/main.jpg" alt="" class="rounded-xl w-full lg:w-1/2">
         <div class="flex flex-col gap-2 w-full lg:w-1/2 items-center text-center">
             <p class="mainHeading">Исследуй технологии</p>
@@ -48,7 +57,8 @@
         </div>
     </div>
     <!-- вошёл -->
-    <div class="bgStars w-full flex max-lg:flex-col gap-6 items-center text-center py-8 px-4 bg-[#2C2C2C]/90 rounded-2xl h-fit shadow-xl">
+    <div
+        class="bgStars w-full flex max-lg:flex-col gap-6 items-center text-center py-8 px-4 bg-[#2C2C2C]/90 rounded-2xl h-fit shadow-xl">
         <img src="/images/index/main.jpg" alt="" class="rounded-xl w-full lg:w-1/2">
         <div class="flex flex-col gap-2 w-full lg:w-1/2 items-center text-center">
             <p class="mainHeading">Добро пожаловать!</p>
@@ -101,5 +111,13 @@ const categories = [
     name: 'Аудио',
     icon: 'mdi:headphones',
   },
+]
+
+// Рандомные данные для статистики
+const stats = [
+  { name: 'Выставок', value: 124, icon: 'mdi:exhibition' },
+  { name: 'Экспонатов', value: 1567, icon: 'mdi:device' },
+  { name: 'Пользователей', value: 892, icon: 'mdi:account' },
+  { name: 'Категорий', value: 18, icon: 'mdi:category' },
 ]
 </script>
