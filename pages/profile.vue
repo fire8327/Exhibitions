@@ -14,6 +14,43 @@
             <button :disabled="isLoading" :class="{ 'opacity-50 cursor-not-allowed': isLoading }" type="submit" class="px-4 py-2 border border-cyan-500 bg-cyan-500 text-white rounded-full w-[160px] text-center transition-all duration-500 hover:text-cyan-500 hover:bg-transparent">Сохранить</button>
         </FormKit>
     </div>
+    <div class="flex flex-col gap-6" v-if="role === 'creator'">
+        <p class="mainHeading">Ваши устройства</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" v-if="devices && devices.length > 0">
+            <div class="flex flex-col gap-4 p-4 rounded-xl shadow-lg">
+                <button type="button" class="cursor-pointer self-end">
+                    <Icon class="text-3xl text-red-500" name="material-symbols:delete-outline"/>
+                </button>
+                <p>Наименование устройства</p>
+                <p>Описание</p>
+                <p>Категория</p>
+            </div>
+        </div>
+        <div class="flex flex-col gap-4 items-center justify-center text-center" v-else>
+            <p class="text-xl font-mono font-semibold text-white">Пока нет устройств</p>
+            <p>Начните создание коллекции, добавив первое устройство</p>
+            <NuxtLink to="/" class="px-4 py-2 border border-cyan-500 bg-cyan-500 text-white rounded-full w-[160px] text-center transition-all duration-500 hover:text-cyan-500 hover:bg-transparent">Добавить</NuxtLink>
+        </div>
+    </div>
+    <div class="flex flex-col gap-6" v-if="role === 'creator'">
+        <p class="mainHeading">Ваши выставки</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" v-if="exhibitions && exhibitions.length > 0">
+            <div class="flex flex-col gap-4 p-4 rounded-xl shadow-lg">
+                <button type="button" class="cursor-pointer self-end">
+                    <Icon class="text-3xl text-red-500" name="material-symbols:delete-outline"/>
+                </button>
+                <p>Наименование выставки</p>
+                <p>Описание</p>
+                <p>Дата начала</p>
+                <p>Дата конца</p>
+            </div>
+        </div>
+        <div class="flex flex-col gap-4 items-center justify-center text-center" v-else>
+            <p class="text-xl font-mono font-semibold text-white">Выставки не созданы</p>
+            <p>Соберите свою первую выставку из добавленных устройств</p>
+            <NuxtLink to="/" class="px-4 py-2 border border-cyan-500 bg-cyan-500 text-white rounded-full w-[160px] text-center transition-all duration-500 hover:text-cyan-500 hover:bg-transparent">Создать</NuxtLink>
+        </div>
+    </div>
 </template>
 
 <script setup>
@@ -71,8 +108,38 @@ const saveProfile = async() => {
 }
 
 
+/* загрузка устройств */
+const devices = ref([])
+const loadDevices = async() => {
+    const { data, error } = await supabase
+    .from('devices')
+    .select()
+    .eq('user_id', userId)
+
+    if (error) throw error
+
+    if (data) devices.value = data
+}
+
+
+/* загрузка выставок */
+const exhibitions = ref([])
+const loadExhibitions = async() => {
+    const { data, error } = await supabase
+    .from('exhibitions')
+    .select()
+    .eq('user_id', userId)
+
+    if (error) throw error
+
+    if (data) exhibitions.value = data
+}
+
+
 /* первоначальная загрузка */
 onMounted(() => {
     loadProfileData()
+    loadDevices()
+    loadExhibitions()
 })
 </script>
