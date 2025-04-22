@@ -48,7 +48,6 @@ useSeoMeta({
 const user = ref({
     surname: "",
     name: "",
-    avatar: "",
     login: "",
     password: "",
     email: "",
