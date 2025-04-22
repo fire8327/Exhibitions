@@ -25,7 +25,7 @@
                 <p>Описание</p>
                 <p>Категория</p>
             </div>
-            <NuxtLink to="/" class="flex items-center justify-center gap-4 w-full py-6 rounded-xl shadow-lg transition-all duration-500 hover:opacity-60 bg-[#2C2C2C]">
+            <NuxtLink to="/profile/add-device" class="flex items-center justify-center gap-4 w-full py-6 rounded-xl shadow-lg transition-all duration-500 hover:opacity-60 bg-[#2C2C2C]">
                 <Icon class="text-3xl" name="material-symbols:add-diamond-rounded"/>
                 <span>Добавить</span>
             </NuxtLink>
@@ -33,7 +33,7 @@
         <div class="flex flex-col gap-4 items-center justify-center text-center" v-else>
             <p class="text-xl font-mono font-semibold text-white">Пока нет устройств</p>
             <p>Начните создание коллекции, добавив первое устройство</p>
-            <NuxtLink to="/" class="px-4 py-2 border border-cyan-500 bg-cyan-500 text-white rounded-full w-[160px] text-center transition-all duration-500 hover:text-cyan-500 hover:bg-transparent">Добавить</NuxtLink>
+            <NuxtLink to="/profile/add-device" class="px-4 py-2 border border-cyan-500 bg-cyan-500 text-white rounded-full w-[160px] text-center transition-all duration-500 hover:text-cyan-500 hover:bg-transparent">Добавить</NuxtLink>
         </div>
     </div>
     <div class="flex flex-col gap-6" v-if="role === 'creator'">
