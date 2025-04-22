@@ -17,7 +17,7 @@
     <div class="flex flex-col gap-6" v-if="role === 'creator'">
         <p class="mainHeading">Ваши устройства</p>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" v-if="devices && devices.length > 0">
-            <div class="flex flex-col gap-4 p-4 rounded-xl shadow-lg">
+            <div class="flex flex-col gap-4 p-4 rounded-xl shadow-lg bg-[#2C2C2C]">
                 <button type="button" class="cursor-pointer self-end">
                     <Icon class="text-3xl text-red-500" name="material-symbols:delete-outline"/>
                 </button>
@@ -25,6 +25,10 @@
                 <p>Описание</p>
                 <p>Категория</p>
             </div>
+            <NuxtLink to="/" class="flex items-center justify-center gap-4 w-full py-6 rounded-xl shadow-lg transition-all duration-500 hover:opacity-60 bg-[#2C2C2C]">
+                <Icon class="text-3xl" name="material-symbols:add-diamond-rounded"/>
+                <span>Добавить</span>
+            </NuxtLink>
         </div>
         <div class="flex flex-col gap-4 items-center justify-center text-center" v-else>
             <p class="text-xl font-mono font-semibold text-white">Пока нет устройств</p>
@@ -35,7 +39,7 @@
     <div class="flex flex-col gap-6" v-if="role === 'creator'">
         <p class="mainHeading">Ваши выставки</p>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" v-if="exhibitions && exhibitions.length > 0">
-            <div class="flex flex-col gap-4 p-4 rounded-xl shadow-lg">
+            <div class="flex flex-col gap-4 p-4 rounded-xl shadow-lg bg-[#2C2C2C]">
                 <button type="button" class="cursor-pointer self-end">
                     <Icon class="text-3xl text-red-500" name="material-symbols:delete-outline"/>
                 </button>
@@ -44,6 +48,10 @@
                 <p>Дата начала</p>
                 <p>Дата конца</p>
             </div>
+            <NuxtLink to="/" class="flex items-center justify-center gap-4 w-full py-6 rounded-xl shadow-lg transition-all duration-500 hover:opacity-60 bg-[#2C2C2C]">
+                <Icon class="text-3xl" name="material-symbols:add-diamond-rounded"/>
+                <span>Добавить</span>
+            </NuxtLink>
         </div>
         <div class="flex flex-col gap-4 items-center justify-center text-center" v-else>
             <p class="text-xl font-mono font-semibold text-white">Выставки не созданы</p>
