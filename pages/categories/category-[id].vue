@@ -1,12 +1,12 @@
 <template>
-    <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-6 grow">
         <div class="flex md:items-center md:justify-between gap-4 max-md:flex-col w-full">
             <p class="mainHeading">{{ category?.name }}</p>
             <NuxtLink to="/categories"
                 class="max-md:order-first px-4 py-2 border border-cyan-500 text-cyan-500 rounded-full w-[160px] text-center transition-all duration-500 hover:text-white hover:bg-cyan-500">
                 Назад</NuxtLink>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" v-if="devices && devices.length > 0">
             <div class="flex flex-col gap-4 p-4 rounded-lg bg-[#2C2C2C]" v-for="device in devices">
                 <p>{{ device.name }}</p>
                 <p>{{ device.desc }}</p>
@@ -23,6 +23,9 @@
                     </ClientOnly>
                 </div>
             </div>
+        </div>
+        <div class="grow flex items-center justify-center text-center" v-else>
+            <p class="mainHeading">Устройств в данной категории нет</p>
         </div>
     </div>
 </template>
