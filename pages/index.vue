@@ -67,6 +67,24 @@
 </template>
 
 <script setup>
+// Рандомные данные для выставок
+const exhibitions = [
+  {
+    id: '1',
+    title: 'Tech Expo 2025',
+    description: 'Новейшие смартфоны, ноутбуки и умные гаджеты от ведущих брендов.',
+    image: 'https://img.freepik.com/free-photo/person-using-ar-technology-their-daily-occupation_23-2151137526.jpg?t=st=1745230247~exp=1745233847~hmac=1cb656314088a7141ba658d02befb10c1c3e278a6bf1bf7cc675dbc137bf7bc9&w=996',
+    slug: 'tech-expo-2025',
+  },
+  {
+    id: '2',
+    title: 'Gadget Showcase',
+    description: 'Инновационные устройства для дома и работы, представленные в AR.',
+    image: 'https://img.freepik.com/free-photo/person-using-ar-technology-their-daily-occupation_23-2151137526.jpg?t=st=1745230247~exp=1745233847~hmac=1cb656314088a7141ba658d02befb10c1c3e278a6bf1bf7cc675dbc137bf7bc9&w=996',
+    slug: 'gadget-showcase',
+  },
+]
+
 /* проверка роли и */
 const userStore = useUserStore()
 const { id:userId, role, authenticated } = useUserStore()
