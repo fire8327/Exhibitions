@@ -4,7 +4,7 @@
             <p class="mainHeading">Добавление устройства</p>
             <NuxtLink to="/profile" class="max-md:order-first px-4 py-2 border border-cyan-500 text-cyan-500 rounded-full w-[160px] text-center transition-all duration-500 hover:text-white hover:bg-cyan-500">Назад</NuxtLink>
         </div>
-        <FormKit type="form" :actions="false" messages-class="hidden" form-class="w-full flex flex-col gap-6 items-center justify-center text-[#1C1C1C]">
+        <FormKit @submit="addDevice" type="form" :actions="false" messages-class="hidden" form-class="w-full flex flex-col gap-6 items-center justify-center text-[#1C1C1C]">
             <FormKit v-model="deviceForm.name" validation="required" messages-class="text-[#E9556D] font-mono" type="text" placeholder="Наименование устройства" name="Наименование устройства" outer-class="w-full md:w-2/3 lg:w-1/2" input-class="focus:outline-none px-4 py-2 bg-white rounded-xl border border-transparent w-full transition-all duration-500 focus:border-cyan-500 shadow-md"/>
             <FormKit v-model="deviceForm.desc" validation="required" messages-class="text-[#E9556D] font-mono" type="textarea" placeholder="Описание устройства" name="Описание устройства" outer-class="w-full md:w-2/3 lg:w-1/2" input-class="focus:outline-none px-4 py-2 bg-white rounded-xl border border-transparent w-full transition-all duration-500 focus:border-cyan-500 shadow-md"/>
             <FormKit v-model="deviceForm.manufacturer" validation="required" messages-class="text-[#E9556D] font-mono" type="text" placeholder="Производитель" name="Производитель" outer-class="w-full md:w-2/3 lg:w-1/2" input-class="focus:outline-none px-4 py-2 bg-white rounded-xl border border-transparent w-full transition-all duration-500 focus:border-cyan-500 shadow-md"/>
@@ -55,8 +55,43 @@ const deviceForm = ref({
     desc: "",
     file: "",
     category_id: null,
-    manufacturer: ""
+    manufacturer: "",
+    user_id: userId
 })
+
+
+/* добавление товара */
+const addDevice = async() => {
+    if (modelFile.value) {
+        const file = modelFile.value
+        const extension = file.name.split('.').pop()
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 7)}.${extension}`
+
+            
+        const { error: uploadError } = await supabase.storage
+        .from('files/models')
+        .upload(`${fileName}`, file)
+
+        if (uploadError) throw uploadError
+
+        deviceForm.value.file = fileName
+
+    }
+
+    const { data, error } = await supabase
+    .from('devices')
+    .insert(deviceForm.value)
+    .select()
+
+    if (data) {
+        console.log(data)
+        showMessage('Успешно добавлено!', true)
+        router.push('/profile')
+    } else {
+        console.log(user.value)
+        showMessage('Произошла ошибка!', false)
+    }
+}
 
 
 /* первоначальная загрузка */

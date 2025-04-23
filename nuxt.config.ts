@@ -9,6 +9,12 @@ export default defineNuxtConfig({
     '@formkit/nuxt',
     '@nuxtjs/supabase'
   ],
+
+  vue: {
+    compilerOptions: {
+      isCustomElement: (tag) => tag === 'model-viewer',
+    },
+  },
   
   postcss: {
     plugins: {
