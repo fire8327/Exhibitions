@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="grow flex items-center justify-center text-center" v-else>
-            <p class="mainHeading">Устройств в данной категории нет</p>
+            <p class="mainHeading">Устройств в данной категории пока нет</p>
         </div>
     </div>
 </template>

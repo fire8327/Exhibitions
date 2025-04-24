@@ -4,7 +4,7 @@
         <p class="mainHeading">Наша платформа</p>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div class="bg-[#2C2C2C]/90 rounded-xl p-5 text-center shadow-md transition-all duration-500 hover:bg-[#2C2C2C] hover:shadow-lg group">
-                <p class="text-2xl font-bold text-white mb-1">{{ exhibitions ? exhibitions.length : '0' }}</p>
+                <p class="text-2xl font-bold text-white mb-1">{{ exhibitionsStats ? exhibitionsStats.length : '0' }}</p>
                 <p class="font-light">Выставок</p>
             </div>
             <div class="bg-[#2C2C2C]/90 rounded-xl p-5 text-center shadow-md transition-all duration-500 hover:bg-[#2C2C2C] hover:shadow-lg group">
@@ -24,8 +24,8 @@
     <!-- выставки -->
     <div class="flex flex-col gap-6">
         <p class="mainHeading">Текущие выставки</p>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <NuxtLink to="/" v-for="exhibition in exhibitions"
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" v-if="exhibitions && exhibitions.length > 0">
+            <NuxtLink to="/" v-for="exhibition in exhibitions.slice(0,2)"
                 class="group bg-gradient-to-b from-[#2C2C2C]/90 to-[#1C1C1C] rounded-2xl overflow-hidden transition-all duration-500 shadow-xl">
                 <div class="relative overflow-hidden">
                     <img :src="`https://qwcdjqzfdpcefrsxdktn.supabase.co/storage/v1/object/public/files/images/${exhibition.image}`" :alt="exhibition.title"
@@ -42,6 +42,11 @@
                     </span>
                 </div>
             </NuxtLink>
+        </div>
+        <div class="flex flex-col items-center justify-center text-center grow gap-6" v-else>
+          <p class="mainHeading">Текущих выставок пока нет</p>
+          <p>Все выставки доступны в каталоге</p>
+          <NuxtLink to="/exhibitions" class="mx-auto px-4 py-2 border border-cyan-500 text-cyan-500 rounded-full w-[160px] text-center transition-all duration-500 hover:text-white hover:bg-cyan-500">Перейти</NuxtLink>
         </div>
     </div>
     <!-- категории -->
@@ -119,13 +124,30 @@ const loadUsers = async () => {
 /* загрузка выставок */
 const exhibitions = ref([])
 const loadExhibitions = async () => {
+  const now = new Date().toISOString()
+
+  const { data, error } = await supabase
+  .from('exhibitions')
+  .select('*')
+  .lte('start_date', now)
+    .gte('end_date', now)
+  .eq('is_published', true)
+
+  if(data) {
+    exhibitions.value = data
+  }
+}
+
+// только для статистики
+const exhibitionsStats = ref([])
+const loadExhibitionsStats = async () => {
   const { data, error } = await supabase
   .from('exhibitions')
   .select('*')
   .eq('is_published', true)
 
   if(data) {
-    exhibitions.value = data
+    exhibitionsStats.value = data
   }
 }
 
@@ -136,5 +158,6 @@ onMounted(() => {
   loadDevices()
   loadUsers()
   loadExhibitions()
+  loadExhibitionsStats()
 })
 </script>

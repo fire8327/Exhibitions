@@ -1,7 +1,7 @@
 <template>
       <div class="flex flex-col gap-6">
         <p class="mainHeading">Все выставки</p>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" v-if="data">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" v-if="data && data.length > 0">
             <NuxtLink to="/" v-for="exhibition in data"
                 class="group bg-gradient-to-b from-[#2C2C2C]/90 to-[#1C1C1C] rounded-2xl overflow-hidden transition-all duration-500 shadow-xl">
                 <div class="relative overflow-hidden">
@@ -20,7 +20,7 @@
                 </div>
             </NuxtLink>
         </div>
-        <div class="flex flex-col items-center justify-center text-center grow gap-6">
+        <div class="flex flex-col items-center justify-center text-center grow gap-6" v-else>
           <p class="mainHeading">Выставок пока нет</p>
           <NuxtLink to="/" class="mx-auto px-4 py-2 border border-cyan-500 text-cyan-500 rounded-full w-[160px] text-center transition-all duration-500 hover:text-white hover:bg-cyan-500">На главную</NuxtLink>
         </div>
