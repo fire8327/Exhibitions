@@ -2,12 +2,12 @@
     <div class="flex flex-col gap-6 grow">
         <div class="flex md:items-center md:justify-between gap-4 max-md:flex-col w-full">
             <p class="mainHeading">{{ category?.name }}</p>
-            <NuxtLink to="/categories"
-                class="max-md:order-first px-4 py-2 border border-cyan-500 text-cyan-500 rounded-full w-[160px] text-center transition-all duration-500 hover:text-white hover:bg-cyan-500">
+            <NuxtLink @click="goBack"
+                class="cursor-pointer max-md:order-first px-4 py-2 border border-cyan-500 text-cyan-500 rounded-full w-[160px] text-center transition-all duration-500 hover:text-white hover:bg-cyan-500">
                 Назад</NuxtLink>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" v-if="devices && devices.length > 0">
-            <div class="flex flex-col gap-4 p-4 rounded-lg bg-[#2C2C2C]" v-for="device in devices">
+            <div class="flex flex-col gap-4 p-4 rounded-lg bg-[#2C2C2C] text-white" v-for="device in devices">
                 <p>{{ device.name }}</p>
                 <p>{{ device.desc }}</p>
                 <div class="relative w-full h-96 rounded-md overflow-hidden bg-gradient-to-b from-[#2C2C2C]/90 to-[#1A1A1A] shadow-lg">
@@ -22,6 +22,9 @@
                         </model-viewer>
                     </ClientOnly>
                 </div>
+                <NuxtLink :to="`/devices/device-${device.id}`"
+                class="px-4 py-2 border border-cyan-500 hover:text-cyan-500 rounded-full w-full text-center transition-all duration-500 text-white bg-cyan-500 hover:bg-transparent">
+                Подробнее</NuxtLink>
             </div>
         </div>
         <div class="grow flex items-center justify-center text-center" v-else>
@@ -31,6 +34,16 @@
 </template>
 
 <script setup>
+/* возвращение назад */
+const goBack = () => {
+  if (window.history.state?.back) {
+    useRouter().back();
+  } else {
+    useRouter().push('/'); // Или fallback-маршрут
+  }
+}
+
+
 /* подключение БД и роут */
 const supabase = useSupabaseClient()
 const route = useRoute()
