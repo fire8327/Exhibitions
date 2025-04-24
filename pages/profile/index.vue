@@ -17,13 +17,13 @@
     <div class="flex flex-col gap-6" v-if="role === 'creator'">
         <p class="mainHeading">Ваши устройства</p>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" v-if="devices && devices.length > 0">
-            <div class="flex flex-col gap-4 p-4 rounded-xl shadow-lg bg-[#2C2C2C]">
-                <button type="button" class="cursor-pointer self-end">
+            <div class="flex flex-col gap-4 p-4 rounded-xl shadow-lg bg-[#2C2C2C]" v-for="device in devices">
+                <button @click="deleteDevice(device.id)" type="button" class="cursor-pointer self-end">
                     <Icon class="text-3xl text-red-500" name="material-symbols:delete-outline"/>
                 </button>
-                <p>Наименование устройства</p>
-                <p>Описание</p>
-                <p>Категория</p>
+                <p><span class="text-white font-semibold font-mono">Наименование: </span>{{ device.name }}</p>
+                <p class="line-clamp-2 text-white font-semibold font-mono">{{ device.desc }}</p>
+                <p><span class="text-white font-semibold font-mono">Категория: </span>{{ device.categories.name }}</p>
             </div>
             <NuxtLink to="/profile/add-device" class="flex items-center justify-center gap-4 w-full py-6 rounded-xl shadow-lg transition-all duration-500 hover:opacity-60 bg-[#2C2C2C]">
                 <Icon class="text-3xl" name="material-symbols:add-diamond-rounded"/>
@@ -39,16 +39,16 @@
     <div class="flex flex-col gap-6" v-if="role === 'creator'">
         <p class="mainHeading">Ваши выставки</p>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" v-if="exhibitions && exhibitions.length > 0">
-            <div class="flex flex-col gap-4 p-4 rounded-xl shadow-lg bg-[#2C2C2C]">
-                <button type="button" class="cursor-pointer self-end">
+            <div class="flex flex-col gap-4 p-4 rounded-xl shadow-lg bg-[#2C2C2C]" v-for="exhibition in exhibitions">
+                <button @click="deleteExhibition(exhibition.id)" type="button" class="cursor-pointer self-end">
                     <Icon class="text-3xl text-red-500" name="material-symbols:delete-outline"/>
                 </button>
-                <p>Наименование выставки</p>
-                <p>Описание</p>
-                <p>Дата начала</p>
-                <p>Дата конца</p>
+                <p><span class="text-white font-semibold font-mono">Наименование: </span>{{ exhibition.name }}</p>
+                <p class="line-clamp-2 text-white font-semibold font-mono">{{ exhibition.desc }}</p>
+                <p><span class="text-white font-semibold font-mono">Дата начала: </span>{{ new Date(exhibition.start_date).toLocaleDateString() }}</p>
+                <p><span class="text-white font-semibold font-mono">Дата конца: </span>{{ new Date(exhibition.end_date).toLocaleDateString() }}</p>
             </div>
-            <NuxtLink to="/" class="flex items-center justify-center gap-4 w-full py-6 rounded-xl shadow-lg transition-all duration-500 hover:opacity-60 bg-[#2C2C2C]">
+            <NuxtLink to="/profile/add-exhibition" class="flex items-center justify-center gap-4 w-full py-6 rounded-xl shadow-lg transition-all duration-500 hover:opacity-60 bg-[#2C2C2C]">
                 <Icon class="text-3xl" name="material-symbols:add-diamond-rounded"/>
                 <span>Добавить</span>
             </NuxtLink>
@@ -56,7 +56,7 @@
         <div class="flex flex-col gap-4 items-center justify-center text-center" v-else>
             <p class="text-xl font-mono font-semibold text-white">Выставки не созданы</p>
             <p>Соберите свою первую выставку из добавленных устройств</p>
-            <NuxtLink to="/" class="px-4 py-2 border border-cyan-500 bg-cyan-500 text-white rounded-full w-[160px] text-center transition-all duration-500 hover:text-cyan-500 hover:bg-transparent">Создать</NuxtLink>
+            <NuxtLink to="/profile/add-exhibition" class="px-4 py-2 border border-cyan-500 bg-cyan-500 text-white rounded-full w-[160px] text-center transition-all duration-500 hover:text-cyan-500 hover:bg-transparent">Создать</NuxtLink>
         </div>
     </div>
 </template>
@@ -116,12 +116,14 @@ const saveProfile = async() => {
 }
 
 
-/* загрузка устройств */
+/* устройства */
 const devices = ref([])
+
+// добавление
 const loadDevices = async() => {
     const { data, error } = await supabase
     .from('devices')
-    .select()
+    .select('*, categories(*)')
     .eq('user_id', userId)
 
     if (error) throw error
@@ -129,19 +131,98 @@ const loadDevices = async() => {
     if (data) devices.value = data
 }
 
+// удаление
+const deleteDevice = async(deviceId) => {
+    try {
+        // Получаем данные услуги
+        const { data: deviceData, error: fetchError } = await supabase
+            .from('devices')
+            .select('file')
+            .eq('id', deviceId)
+            .single()
 
-/* загрузка выставок */
+        if (fetchError) throw fetchError
+
+        
+        const { error: storageError } = await supabase.storage
+            .from('files')
+            .remove([`models/${deviceData.file}`])
+
+        if (storageError) throw storageError
+    
+
+        // Удаляем запись из БД
+        const { error: deleteError } = await supabase
+            .from('devices')
+            .delete()
+            .eq('id', deviceId)
+
+        if (deleteError) throw deleteError
+
+        // Обновляем список
+        await loadDevices()
+        showMessage('Устройство удалено!', true)
+
+    } catch (error) {
+        console.error('Ошибка:', error)
+        showMessage(`Ошибка удаления: ${error.message}`, false)
+    }
+}
+
+
+/* выставки */
 const exhibitions = ref([])
+
+// добавление
 const loadExhibitions = async() => {
     const { data, error } = await supabase
     .from('exhibitions')
     .select()
-    .eq('user_id', userId)
+    .eq('creator_id', userId)
 
     if (error) throw error
 
     if (data) exhibitions.value = data
 }
+
+//удаление
+const deleteExhibition = async(exhibitionId) => {
+    try {
+        // Получаем данные услуги
+        const { data: exhibitionData, error: fetchError } = await supabase
+            .from('exhibitions')
+            .select('image')
+            .eq('id', exhibitionId)
+            .single()
+
+        if (fetchError) throw fetchError
+
+        
+        const { error: storageError } = await supabase.storage
+            .from('files')
+            .remove([`images/${exhibitionData.file}`])
+
+        if (storageError) throw storageError
+    
+
+        // Удаляем запись из БД
+        const { error: deleteError } = await supabase
+            .from('exhibitions')
+            .delete()
+            .eq('id', exhibitionId)
+
+        if (deleteError) throw deleteError
+
+        // Обновляем список
+        await loadExhibitions()
+        showMessage('Выставка удалена!', true)
+
+    } catch (error) {
+        console.error('Ошибка:', error)
+        showMessage(`Ошибка удаления: ${error.message}`, false)
+    }
+}
+
 
 
 /* первоначальная загрузка */
