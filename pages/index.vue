@@ -188,7 +188,7 @@ const toggleFavorite = async(exhibitionId) => {
       
       if (!error) {
         favorites.value = favorites.value.filter(id => id !== exhibitionId)
-        showMessage('Удалено из избранного', true)
+        showMessage('Удалена из избранного', true)
       } else {
         showMessage('Произошла ошибка', false)
       }
@@ -202,7 +202,7 @@ const toggleFavorite = async(exhibitionId) => {
       
       if (!error) {
         favorites.value = [...favorites.value, exhibitionId]
-        showMessage('Добавлено в избранное', true)
+        showMessage('Добавлена в избранное', true)
       } else {
         showMessage('Произошла ошибка', false)
       }

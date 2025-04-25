@@ -59,6 +59,48 @@
             <NuxtLink to="/profile/add-exhibition" class="px-4 py-2 border border-cyan-500 bg-cyan-500 text-white rounded-full w-[160px] text-center transition-all duration-500 hover:text-cyan-500 hover:bg-transparent">Создать</NuxtLink>
         </div>
     </div>
+    <div class="flex flex-col gap-6" v-if="role === 'user'">
+        <p class="mainHeading">Избранные выставки</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" v-if="favoriteExhibitions && favoriteExhibitions.length > 0">
+            <div class="flex flex-col gap-4 p-4 rounded-xl shadow-lg bg-[#2C2C2C]" v-for="favoriteExhibition in favoriteExhibitions">
+                <button @click="removeFavorite('favorite_exhibitions', favoriteExhibition.id)" type="button" class="cursor-pointer self-end">
+                    <Icon class="text-3xl text-red-500" name="material-symbols:heart-check-outline"/>
+                </button>
+                <p><span class="text-white font-semibold font-mono">Наименование: </span>{{ favoriteExhibition.exhibitions.name }}</p>
+                <p class="line-clamp-2 text-white font-semibold font-mono">{{ favoriteExhibition.exhibitions.desc }}</p>
+                <p><span class="text-white font-semibold font-mono">Дата начала: </span>{{ new Date(favoriteExhibition.exhibitions.start_date).toLocaleDateString() }}</p>
+                <p><span class="text-white font-semibold font-mono">Дата конца: </span>{{ new Date(favoriteExhibition.exhibitions.end_date).toLocaleDateString() }}</p>
+            </div>
+            <NuxtLink to="/exhibitions" class="flex items-center justify-center gap-4 w-full py-6 rounded-xl shadow-lg transition-all duration-500 hover:opacity-60 bg-[#2C2C2C]">
+                <Icon class="text-3xl" name="material-symbols:add-diamond-rounded"/>
+                <span>Добавить</span>
+            </NuxtLink>
+        </div>
+        <div class="flex flex-col gap-4 items-center justify-center text-center" v-else>
+            <p class="text-xl font-mono font-semibold text-white">Пока нет выставок</p>
+            <NuxtLink to="/exhibitions" class="px-4 py-2 border border-cyan-500 bg-cyan-500 text-white rounded-full w-[160px] text-center transition-all duration-500 hover:text-cyan-500 hover:bg-transparent">Добавить</NuxtLink>
+        </div>
+    </div>
+    <div class="flex flex-col gap-6" v-if="role === 'user'">
+        <p class="mainHeading">Избранные устройства</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" v-if="favoriteDevices && favoriteDevices.length > 0">
+            <div class="flex flex-col gap-4 p-4 rounded-xl shadow-lg bg-[#2C2C2C]" v-for="favoriteDevice in favoriteDevices">
+                <button @click="removeFavorite('favorite_devices', favoriteDevice.id)" type="button" class="cursor-pointer self-end">
+                    <Icon class="text-3xl text-red-500" name="material-symbols:heart-check-outline"/>
+                </button>
+                <p><span class="text-white font-semibold font-mono">Наименование: </span>{{ favoriteDevice.devices.name }}</p>
+                <p class="line-clamp-2 text-white font-semibold font-mono">{{ favoriteDevice.devices.desc }}</p>
+            </div>
+            <NuxtLink to="/categories" class="flex items-center justify-center gap-4 w-full py-6 rounded-xl shadow-lg transition-all duration-500 hover:opacity-60 bg-[#2C2C2C]">
+                <Icon class="text-3xl" name="material-symbols:add-diamond-rounded"/>
+                <span>Добавить</span>
+            </NuxtLink>
+        </div>
+        <div class="flex flex-col gap-4 items-center justify-center text-center" v-else>
+            <p class="text-xl font-mono font-semibold text-white">Пока нет устройств</p>
+            <NuxtLink to="/categories" class="px-4 py-2 border border-cyan-500 bg-cyan-500 text-white rounded-full w-[160px] text-center transition-all duration-500 hover:text-cyan-500 hover:bg-transparent">Добавить</NuxtLink>
+        </div>
+    </div>
     <div class="flex flex-col gap-6">
         <p class="mainHeading">Выход</p>
         <button @click="logout" class="px-4 py-2 border border-cyan-500 bg-cyan-500 text-white rounded-full w-[160px] text-center transition-all duration-500 hover:text-cyan-500 hover:bg-transparent">Выйти</button>
@@ -227,12 +269,55 @@ const deleteExhibition = async(exhibitionId) => {
     }
 }
 
+/* загрузка избранного */
+// устройства
+const favoriteDevices = ref([])
+const loadFavoriteDevices = async() => {
+    const { data, error } = await supabase
+    .from('favorite_devices')
+    .select('*, devices(*)')
+    .eq('user_id', userId)
+
+    if (data) {
+        favoriteDevices.value = data
+    }
+}
+
+// выставки
+const favoriteExhibitions = ref([])
+const loadFavoriteExhibitions = async() => {
+    const { data, error } = await supabase
+    .from('favorite_exhibitions')
+    .select('*, exhibitions(*)')
+    .eq('user_id', userId)
+
+    if (data) {
+        favoriteExhibitions.value = data
+    }
+}
+
+// удаление из избранного
+const removeFavorite = async(table, entityId) => {
+    const { error: deleteError } = await supabase
+    .from(table)
+    .delete()
+    .eq('id', entityId) 
+
+    if (!deleteError) {
+        table === 'favorite_devices' ? loadFavoriteDevices() : loadFavoriteExhibitions()
+        showMessage(table === 'favorite_devices' ? 'Удалено из избранного' : 'Удалена из избранного', true)
+      } else {
+        showMessage('Произошла ошибка', false)
+      }
+}
 
 
 /* первоначальная загрузка */
-onMounted(() => {
-    loadProfileData()
-    loadDevices()
-    loadExhibitions()
+onMounted(async () => {
+    await loadProfileData()
+    await loadDevices()
+    await loadExhibitions()
+    await loadFavoriteDevices()
+    await loadFavoriteExhibitions()
 })
 </script>
