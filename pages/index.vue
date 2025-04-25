@@ -211,12 +211,12 @@ const toggleFavorite = async(exhibitionId) => {
 
 
 /* первоначальная загрузка */
-onMounted(async () => {
-  await loadCategories()
-  await loadDevices()
-  await loadUsers()
-  await loadExhibitions()
-  await loadExhibitionsStats()
-  await loadFavorites()
+onMounted(() => {
+  loadExhibitions()
+  loadCategories()
+  loadDevices()
+  loadUsers()
+  loadExhibitionsStats()
+  loadFavorites()
 })
 </script>

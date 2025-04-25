@@ -313,11 +313,11 @@ const removeFavorite = async(table, entityId) => {
 
 
 /* первоначальная загрузка */
-onMounted(async () => {
-    await loadProfileData()
-    await loadDevices()
-    await loadExhibitions()
-    await loadFavoriteDevices()
-    await loadFavoriteExhibitions()
+onMounted(() => {
+    loadProfileData()
+    loadDevices()
+    loadExhibitions()
+    loadFavoriteDevices()
+    loadFavoriteExhibitions()
 })
 </script>

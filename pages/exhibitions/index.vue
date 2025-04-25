@@ -107,8 +107,8 @@ const toggleFavorite = async(exhibitionId) => {
 
 
 /* первоначальная загрузка */
-onMounted(async () => {
-    await loadExhibitions()
-    await loadFavorites()
+onMounted(() => {
+  loadExhibitions()
+  loadFavorites()
 })
 </script>
