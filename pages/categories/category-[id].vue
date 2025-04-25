@@ -8,6 +8,9 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" v-if="devices && devices.length > 0">
             <div class="flex flex-col gap-4 p-4 rounded-lg bg-[#2C2C2C] text-white" v-for="device in devices">
+                <button @click="toggleFavorite(device.id)" class="cursor-pointer self-end" v-if="authenticated && role !=='admin' && role !=='creator'"> 
+                    <Icon class="text-3xl transition-all duration-500" :name="isFavorite(device.id) ? 'material-symbols:heart-check-outline' : 'material-symbols:heart-plus-outline'" :class="isFavorite(device.id) ? 'text-red-500' : 'text-gray-400 hover:text-red-500'"/>
+                </button>
                 <p>{{ device.name }}</p>
                 <p>{{ device.desc }}</p>
                 <div class="relative w-full h-96 rounded-md overflow-hidden bg-gradient-to-b from-[#2C2C2C]/90 to-[#1A1A1A] shadow-lg">
@@ -34,6 +37,11 @@
 </template>
 
 <script setup>
+/* проверка роли и создание сообщений */
+const { id:userId, role, authenticated } = useUserStore()
+const { showMessage } = useMessagesStore()
+
+
 /* возвращение назад */
 const goBack = () => {
   if (window.history.state?.back) {
@@ -79,6 +87,60 @@ const loadDevices = async() => {
 }
 
 
+/* избранное */
+const favorites = ref([])
+
+// загрузка избранного пользователя
+const loadFavorites = async () => {
+    const { data, error } = await supabase
+      .from('favorite_devices')
+      .select('device_id')
+      .eq('user_id', userId)
+    
+    if (data) {
+      favorites.value = data.map(item => item.device_id)
+    }
+}
+
+/* проверка, находится ли устройство в избранном */
+const isFavorite = (deviceId) => {
+  return favorites.value.includes(deviceId)
+}
+
+// переключение избранного
+const toggleFavorite = async(deviceId) => {
+    if (isFavorite(deviceId)) {
+      // удаление из избранного
+      const { error } = await supabase
+        .from('favorite_devices')
+        .delete()
+        .eq('user_id', userId)
+        .eq('device_id', deviceId)
+      
+      if (!error) {
+        favorites.value = favorites.value.filter(id => id !== deviceId)
+        showMessage('Удалено из избранного', true)
+      } else {
+        showMessage('Произошла ошибка', false)
+      }
+    } else {
+      // добавление в избранное
+      const { error } = await supabase
+        .from('favorite_devices')
+        .insert([
+          { user_id: userId, device_id: deviceId }
+        ])
+      
+      if (!error) {
+        favorites.value = [...favorites.value, deviceId]
+        showMessage('Добавлено в избранное', true)
+      } else {
+        showMessage('Произошла ошибка', false)
+      }
+    }
+}
+
+
 /* первоначальная загрузка */
 onMounted(async () => {
     // импорт библиотеки для загрузки
@@ -87,5 +149,6 @@ onMounted(async () => {
     }
     await loadCategory()
     await loadDevices()
+    await loadFavorites()
 })
 </script>

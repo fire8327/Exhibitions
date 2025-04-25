@@ -59,6 +59,10 @@
             <NuxtLink to="/profile/add-exhibition" class="px-4 py-2 border border-cyan-500 bg-cyan-500 text-white rounded-full w-[160px] text-center transition-all duration-500 hover:text-cyan-500 hover:bg-transparent">Создать</NuxtLink>
         </div>
     </div>
+    <div class="flex flex-col gap-6">
+        <p class="mainHeading">Выход</p>
+        <button @click="logout" class="px-4 py-2 border border-cyan-500 bg-cyan-500 text-white rounded-full w-[160px] text-center transition-all duration-500 hover:text-cyan-500 hover:bg-transparent">Выйти</button>
+    </div>
 </template>
 
 <script setup>
