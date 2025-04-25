@@ -12,10 +12,10 @@
                     </button>
                 </div>
                 <div class="p-6 flex flex-col gap-2">
-                    <span class="text-xl font-semibold font-mono text-white">{{ exhibition.name }}</span>
-                    <span class="font-light line-clamp-2">
+                    <p class="text-xl font-semibold font-mono text-white">{{ exhibition.name }}</p>
+                    <p class="font-light line-clamp-2">
                         {{ exhibition.desc }}
-                    </span>
+                    </p>
                     <NuxtLink to="/"
                         class="flex bg-gradient-to-r from-cyan-500 to-cyan-600 text-white px-4 py-1.5 rounded-full font-medium transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-md w-fit">
                         Подробнее
