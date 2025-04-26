@@ -39,7 +39,7 @@
                     <p class="font-light line-clamp-2">
                         {{ exhibition.desc }}
                     </p>
-                    <NuxtLink to="/"
+                    <NuxtLink :to="`/exhibitions/exhibition-${exhibition.id}`"
                         class="flex bg-gradient-to-r from-cyan-500 to-cyan-600 text-white px-4 py-1.5 rounded-full font-medium transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-md w-fit">
                         Подробнее
                     </NuxtLink>
