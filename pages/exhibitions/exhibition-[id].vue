@@ -1,17 +1,20 @@
 <template>
     <div class="flex flex-col gap-6">
-        <p>Выставка: <span class="text-xl font-semibold text-white font-mono">{{ entity?.exhibitions.name }}</span></p>
-        <p>Организатор: <span class="text-xl font-semibold text-white font-mono">{{ entity?.exhibitions.organizer }}</span></p>
-        <p>Начало: <span class="text-xl font-semibold text-white font-mono">{{ new Date(entity?.exhibitions.start_date).toLocaleDateString() }}</span></p>
-        <p>Конец: <span class="text-xl font-semibold text-white font-mono">{{ new Date(entity?.exhibitions.end_date).toLocaleDateString() }}</span></p>
-        <img :src="`https://qwcdjqzfdpcefrsxdktn.supabase.co/storage/v1/object/public/files/images/${entity?.exhibitions.image}`" alt="" class="w-full rounded-xl aspect-video object-cover border border-white/10">
-        <p class="tracking-widest">{{ entity?.exhibitions.desc }}</p>
+        <button @click="toggleFavorite(exhibition?.id)" class="cursor-pointer self-end" v-if="authenticated && role !=='admin' && role !=='creator'"> 
+            <Icon class="text-3xl transition-all duration-500" :name="isFavorite(exhibition?.id) ? 'material-symbols:heart-check-outline' : 'material-symbols:heart-plus-outline'" :class="isFavorite(exhibition?.id) ? 'text-red-500' : 'text-gray-400 hover:text-red-500'"/>
+        </button>
+        <p>Выставка: <span class="text-xl font-semibold text-white font-mono">{{ exhibition?.name }}</span></p>
+        <p>Организатор: <span class="text-xl font-semibold text-white font-mono">{{ exhibition?.organizer }}</span></p>
+        <p>Начало: <span class="text-xl font-semibold text-white font-mono">{{ new Date(exhibition?.start_date).toLocaleDateString() }}</span></p>
+        <p>Конец: <span class="text-xl font-semibold text-white font-mono">{{ new Date(exhibition?.end_date).toLocaleDateString() }}</span></p>
+        <img :src="`https://qwcdjqzfdpcefrsxdktn.supabase.co/storage/v1/object/public/files/images/${exhibition?.image}`" alt="" class="w-full rounded-xl aspect-video object-cover border border-white/10">
+        <p class="tracking-widest">{{ exhibition?.desc }}</p>
     </div>
     <div class="flex flex-col gap-6">
         <p class="mainHeading">Устройства выставки</p>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="flex flex-col gap-4 p-4 rounded-lg bg-[#2C2C2C] text-white" v-for="device in entity?.devices">
-                <p>{{ device }}</p>
+            <div class="flex flex-col gap-4 p-4 rounded-lg bg-[#2C2C2C] text-white" v-for="device in devices">
+                <p>{{ device.name }}</p>
                 <p>{{ device.desc }}</p>
                 <div class="relative w-full h-96 rounded-md overflow-hidden bg-gradient-to-b from-[#2C2C2C]/90 to-[#1A1A1A] shadow-lg">
                     <ClientOnly>
@@ -45,22 +48,81 @@ const supabase = useSupabaseClient()
 
 
 /* получение выставки */
-const entity = ref([])
-const loadExhibition = async() => {
+const exhibition = ref(null)
+const devices = ref([])
+const loadData = async() => {
+    const { data: exhibitionData, error: exhibitionError } = await supabase
+    .from('exhibitions')
+    .select('*, exhibition_devices(devices(*))')
+    .eq('id', route.params.id)
+    .single()
+
+    if(exhibitionData) {
+        exhibition.value = exhibitionData
+    }
+
+    devices.value = exhibitionData.exhibition_devices
+    .map((ed) => ed.devices)
+}
+
+
+/* избранное */
+const favorites = ref([])
+
+// загрузка избранного пользователя
+const loadFavorites = async () => {
     const { data, error } = await supabase
-    .from('exhibition_devices')
-    .select('*, exhibitions(*), devices(*)')
-    .eq('exhibition_id', route.params.id)
+      .from('favorite_exhibitions')
+      .select('exhibition_id')
+      .eq('user_id', userId)
+    
+    if (data) {
+      favorites.value = data.map(item => item.exhibition_id)
+    }
+}
 
+/* проверка, находится ли устройство в избранном */
+const isFavorite = (exhibitionId) => {
+  return favorites.value.includes(exhibitionId)
+}
 
-    if(data) {
-        entity.value = data
+// переключение избранного
+const toggleFavorite = async(exhibitionId) => {
+    if (isFavorite(exhibitionId)) {
+      // удаление из избранного
+      const { error } = await supabase
+        .from('favorite_exhibitions')
+        .delete()
+        .eq('user_id', userId)
+        .eq('exhibition_id', exhibitionId)
+      
+      if (!error) {
+        favorites.value = favorites.value.filter(id => id !== exhibitionId)
+        showMessage('Удалена из избранного', true)
+      } else {
+        showMessage('Произошла ошибка', false)
+      }
+    } else {
+      // добавление в избранное
+      const { error } = await supabase
+        .from('favorite_exhibitions')
+        .insert([
+          { user_id: userId, exhibition_id: exhibitionId }
+        ])
+      
+      if (!error) {
+        favorites.value = [...favorites.value, exhibitionId]
+        showMessage('Добавлена в избранное', true)
+      } else {
+        showMessage('Произошла ошибка', false)
+      }
     }
 }
 
 
 /* первоначальная загрузка */
 onMounted(() => {
-    loadExhibition()
+    loadData()
+    loadFavorites()
 })
 </script>
