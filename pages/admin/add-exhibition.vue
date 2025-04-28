@@ -52,7 +52,6 @@ const loadDevices = async() => {
     .from('devices')
     .select('id, name')
     .eq('is_approved', true)
-    .eq('user_id', userId)
 
     if (error) throw error
 

@@ -40,6 +40,10 @@
         </div>
         <p v-else class="text-xl font-semibold font-mono text-center">Выставок нет</p>
     </div>
+    <div class="flex flex-col gap-6">
+        <p>Добавление выставок</p>
+        <NuxtLink to="/admin/add-exhibition" class="px-4 py-2 border border-cyan-500 bg-cyan-500 text-white rounded-full w-[160px] text-center transition-all duration-500 hover:text-cyan-500 hover:bg-transparent">Добавить</NuxtLink>
+    </div>
 </template>
 
 <script setup>
