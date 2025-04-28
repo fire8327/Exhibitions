@@ -70,6 +70,7 @@
                 <p class="line-clamp-2 text-white font-semibold font-mono">{{ favoriteExhibition.exhibitions.desc }}</p>
                 <p><span class="text-white font-semibold font-mono">Дата начала: </span>{{ new Date(favoriteExhibition.exhibitions.start_date).toLocaleDateString() }}</p>
                 <p><span class="text-white font-semibold font-mono">Дата конца: </span>{{ new Date(favoriteExhibition.exhibitions.end_date).toLocaleDateString() }}</p>
+                <NuxtLink :to="`/exhibitions/exhibition-${favoriteExhibition.exhibitions.id}`" class="px-4 py-2 border border-cyan-500 bg-cyan-500 text-white rounded-full w-full text-center transition-all duration-500 hover:text-cyan-500 hover:bg-transparent">Подробнее</NuxtLink>
             </div>
             <NuxtLink to="/exhibitions" class="flex items-center justify-center gap-4 w-full py-6 rounded-xl shadow-lg transition-all duration-500 hover:opacity-60 bg-[#2C2C2C]">
                 <Icon class="text-3xl" name="material-symbols:add-diamond-rounded"/>
@@ -90,6 +91,7 @@
                 </button>
                 <p><span class="text-white font-semibold font-mono">Наименование: </span>{{ favoriteDevice.devices.name }}</p>
                 <p class="line-clamp-2 text-white font-semibold font-mono">{{ favoriteDevice.devices.desc }}</p>
+                <NuxtLink :to="`/devices/device-${favoriteDevice.devices.id}`" class="px-4 py-2 border border-cyan-500 bg-cyan-500 text-white rounded-full w-full text-center transition-all duration-500 hover:text-cyan-500 hover:bg-transparent">Подробнее</NuxtLink>
             </div>
             <NuxtLink to="/categories" class="flex items-center justify-center gap-4 w-full py-6 rounded-xl shadow-lg transition-all duration-500 hover:opacity-60 bg-[#2C2C2C]">
                 <Icon class="text-3xl" name="material-symbols:add-diamond-rounded"/>
