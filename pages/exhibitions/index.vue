@@ -2,8 +2,12 @@
   <div class="flex flex-col gap-6">
     <p class="mainHeading">Фильтрация</p>
     <div class="flex items-center flex-col gap-4">
-      <FormKit v-model="searchInput" type="text" placeholder="Наименование выставки" name="Наименование выставки" outer-class="w-full lg:w-1/2" input-class="text-[#2C2C2C] focus:outline-none px-4 py-2 bg-white rounded-xl border border-transparent w-full transition-all duration-500 focus:border-cyan-500 shadow-md"/>
-      <button @click="cancelFilter" class="px-4 py-2 border border-cyan-500 bg-cyan-500 text-white rounded-full w-[160px] text-center transition-all duration-500 hover:text-cyan-500 hover:bg-transparent">Отменить</button>
+      <div class="relative w-full lg:w-1/2">
+        <FormKit v-model="searchInput" type="text" placeholder="Наименование выставки" name="Наименование выставки" outer-class="w-full" input-class="text-[#2C2C2C] focus:outline-none px-4 py-2 bg-white rounded-xl border border-transparent w-full transition-all duration-500 focus:border-cyan-500 shadow-md"/>
+        <button v-if="searchInput" class="absolute top-1/2 -translate-y-1/2 right-4 flex"  @click="cancelFilter">
+          <Icon class="text-3xl text-cyan-500" name="material-symbols:close-small-outline-rounded"/>
+        </button>
+      </div>
     </div>
   </div>
   <div class="flex flex-col gap-6">
